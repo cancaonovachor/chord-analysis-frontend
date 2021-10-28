@@ -1,25 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { useForm } from "react-hook-form";
+
+type FormType = {
+  file: FileList;
+  sameChordPass: boolean;
+  start: number;
+  end: number;
+};
+
+const getExt = (filename: string) => {
+  const pos = filename.lastIndexOf(".");
+  if (pos === -1) return "";
+  return filename.slice(pos + 1);
+};
 
 function App() {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<FormType>();
+  const onSubmit = handleSubmit((data) => console.log(data.file));
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>コード解析</h1>
+      <form method="post" encType="multipart/form-data" onSubmit={onSubmit}>
+        <input
+          type="file"
+          {...register("file", {
+            validate: (file) => {
+              return getExt(file[0].name) === "musicxml";
+            },
+          })}
+        />
+        {errors.file && "ファイルはmusicxml形式でアップロードしてください"}
+        <br />
+        前と同じコードを飛ばす <input type="checkbox" name="sameChordPass" />
+        <br />
+        開始小節
+        <input type="number" {...register("start")} />
+        <br />
+        終了小節 <input type="number" {...register("end")} />
+        <br />
+        <input type="submit" value="Upload" />
+      </form>
+    </>
   );
 }
 
