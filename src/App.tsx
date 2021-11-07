@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { useForm } from "react-hook-form";
+import Dropzone from "./Dropzone";
 
 type FormType = {
   file: FileList;
@@ -15,6 +16,12 @@ const getExt = (filename: string) => {
   return filename.slice(pos + 1);
 };
 
+const style = {
+  width: 200,
+  height: 150,
+  border: "1px dotted #888",
+};
+
 function App() {
   const {
     register,
@@ -27,22 +34,10 @@ function App() {
     <>
       <h1>コード解析</h1>
       <form method="post" encType="multipart/form-data" onSubmit={onSubmit}>
-        <input
-          type="file"
-          {...register("file", {
-            validate: (file) => {
-              return getExt(file[0].name) === "musicxml";
-            },
-          })}
-        />
+        <Dropzone />
         {errors.file && "ファイルはmusicxml形式でアップロードしてください"}
         <br />
         前と同じコードを飛ばす <input type="checkbox" name="sameChordPass" />
-        <br />
-        開始小節
-        <input type="number" {...register("start")} />
-        <br />
-        終了小節 <input type="number" {...register("end")} />
         <br />
         <input type="submit" value="Upload" />
       </form>
