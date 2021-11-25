@@ -11,22 +11,15 @@ type FormType = {
   end: number;
 };
 
-const getExt = (filename: string) => {
-  const pos = filename.lastIndexOf(".");
-  if (pos === -1) return "";
-  return filename.slice(pos + 1);
-};
-
-const style = {
-  width: 200,
-  height: 150,
-  border: "1px dotted #888",
-};
+// const getExt = (filename: string) => {
+//   const pos = filename.lastIndexOf(".");
+//   if (pos === -1) return "";
+//   return filename.slice(pos + 1);
+// };
 
 function App() {
   const {
     register,
-    watch,
     formState: { errors },
     handleSubmit,
   } = useForm<FormType>();
